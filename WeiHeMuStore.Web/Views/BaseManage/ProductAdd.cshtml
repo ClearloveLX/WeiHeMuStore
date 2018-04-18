@@ -1,0 +1,103 @@
+@model WeiHeMuStore.Model.BaseModel.Product
+
+@{
+    ViewData["Title"] = "ProductAdd";
+    Layout = "~/Views/Shared/_SpecialLayout.cshtml";
+}
+
+<div class="col-sm-12">
+    <div class="panel-body">
+        <form method="post" name="form_submit" class="validate" asp-controller="BaseManage" asp-action="ProductCateAdd">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="control-label" asp-for="ProductName">菜品名称</label>
+                        <input type="text" class="form-control" asp-for="ProductName" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="control-label" asp-for="ProductIntroduce">菜品介绍</label>
+                        <input type="text" class="form-control" asp-for="ProductIntroduce" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="control-label" asp-for="ProductPrice">菜品价格</label>
+                        <input type="text" class="form-control" asp-for="ProductPrice" value="0.00" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="control-label">展示图</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" asp-for="ProductImage">
+                            <span class="input-group-addon" style="cursor:pointer" name="uploadImage">上传图片</span>
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                        <input type="file" name="myHeadPhoto" class="form-control" placeholder="选择头像图片" accept="image/gif,image/jpeg,image/jpg,image/png" />
+                        <p class="help-block">选择您的菜品展示图。</p>
+                    </div>
+                    <div class="form-group text-center">
+                        <img id="img_headPhoto" style="width: 280px; height: 280px;" required="required" class="img-thumbnail" />
+                    </div>*@
+                </div>
+            </div>
+
+            <div class="divpadding"></div>
+            <div class="fixedSave">
+                <div class="text-left col-xs-6">
+                    <button id="Save" type="button" class="btn btn-info btn-icon btn-icon-standalone">
+                        <i class="fa-save"></i>
+                        <span>提 交</span>
+                    </button>
+                </div>
+                <div class="text-right col-xs-6 visible-xs">
+                    <button id="close" type="button" class="btn btn-white" onclick="closeLayer()">关 闭</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $("span[name='uploadImage']").click(function () {
+            openiframe('上传菜品图片', '900', '400', '/BaseManage/ProductImage');
+        });
+
+        $("#Save").click(function () {
+            var name = $("#ProductCateName").val();
+            if (isEmpty(name)) {
+                layer.msg('菜品类别名称不能为空！', { time: 1000 });
+                return false;
+            }
+            $.ajax({
+                url: '/BaseManage/ProductCateAdd',
+                type: "POST",
+                dataType: 'JSON',
+                data: { name: name },
+                success: function (result) {
+                    if (result.state == '1') {
+                        layer.msg(result.msg, { time: 1000 });
+                        parent.$("#table_productCate").bootstrapTable('refresh')
+                        setTimeout(function () { window.location.href = '/BaseManage/ProductCateAdd'; }, 1000);
+                    } else {
+                        layer.msg(result.msg, { time: 1000 });
+                    }
+
+                }
+            });
+        });
+    </script>
+}

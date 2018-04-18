@@ -1,4 +1,4 @@
-﻿body {
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -32,4 +32,23 @@
     .carousel-caption {
         display: none;
     }
+}
+
+.fixedSave {
+    position: fixed;
+    width: 100%;
+    bottom: 0px;
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-right: 20px;
+    left: 0;
+    _position: absolute;
+    z-index: 5000; /* for IE6 */
+    _top: expression(documentElement.scrollTop + documentElement.clientHeight-this.offsetHeight); /* for IE6 */
+    overflow: visible;
+    background-color: #fff;
+}
+
+.divpadding {
+    height: 60px;
 }

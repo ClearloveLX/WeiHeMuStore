@@ -1,0 +1,62 @@
+@model WeiHeMuStore.Model.BaseModel.ProductCate
+
+@{
+    ViewData["Title"] = "ProductCateAdd";
+    Layout = "~/Views/Shared/_SpecialLayout.cshtml";
+}
+
+<div class="col-sm-12">
+    <div class="panel-body">
+        <form method="post" name="form_submit" class="validate" asp-controller="BaseManage" asp-action="ProductCateAdd">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="control-label" asp-for="ProductCateName">菜品类别名称</label>
+                        <input type="text" class="form-control" asp-for="ProductCateName" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="divpadding"></div>
+            <div class="fixedSave">
+                <div class="text-left col-xs-6">
+                    <button id="Save" type="button" class="btn btn-info btn-icon btn-icon-standalone">
+                        <i class="fa-save"></i>
+                        <span>提 交</span>
+                    </button>
+                </div>
+                <div class="text-right col-xs-6 visible-xs">
+                    <button id="close" type="button" class="btn btn-white" onclick="closeLayer()">关 闭</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("#Save").click(function () {
+            var name = $("#ProductCateName").val();
+            if (isEmpty(name)) {
+                layer.msg('菜品类别名称不能为空！', { time: 1000 });
+                return false;
+            }
+            $.ajax({
+                url: '/BaseManage/ProductCateAdd',
+                type: "POST",
+                dataType: 'JSON',
+                data: { name: name },
+                success: function (result) {
+                    if (result.state == '1') {
+                        layer.msg(result.msg, { time: 1000 });
+                        parent.$("#table_productCate").bootstrapTable('refresh');
+                        setTimeout(function () { window.location.href = '/BaseManage/ProductCateAdd'; }, 1000);
+                    } else {
+                        layer.msg(result.msg, { time: 1000 });
+                    }
+
+                }
+            });
+        });
+    </script>
+}
